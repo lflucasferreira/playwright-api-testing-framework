@@ -30,9 +30,9 @@ export class AuthAPI extends BaseAPI {
 
   /**
    * Creates token with default admin credentials
-   * Uses cached token if available
+   * Uses cached token if available with retry logic
    */
-  async getAdminToken(): Promise<string> {
+  async getAdminToken(retries = 3): Promise<string> {
     if (AuthAPI.cachedToken) {
       return AuthAPI.cachedToken;
     }
@@ -42,13 +42,35 @@ export class AuthAPI extends BaseAPI {
       password: process.env.API_PASSWORD || 'password123',
     };
 
-    const { data } = await this.createToken(credentials);
+    let lastError: Error | null = null;
     
-    if (!data.token) {
-      throw new Error('Failed to obtain authentication token');
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const { data } = await this.createToken(credentials);
+        
+        // Check if token was cached by createToken or present in response
+        if (AuthAPI.cachedToken) {
+          return AuthAPI.cachedToken;
+        }
+        
+        if (data.token) {
+          AuthAPI.cachedToken = data.token;
+          return data.token;
+        }
+        
+        // If no token, wait before retrying
+        if (attempt < retries) {
+          await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+        }
+      } catch (error) {
+        lastError = error as Error;
+        if (attempt < retries) {
+          await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+        }
+      }
     }
 
-    return data.token;
+    throw lastError || new Error('Failed to obtain authentication token after retries');
   }
 
   /**

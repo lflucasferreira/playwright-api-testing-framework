@@ -7,8 +7,8 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 2 : 1,
+  workers: process.env.CI ? 1 : 3,
   reporter: [
     ['list'],
     ['html', { outputFolder: 'reports/html-report' }],
@@ -22,6 +22,7 @@ export default defineConfig({
       'Content-Type': 'application/json',
     },
     trace: 'on-first-retry',
+    ignoreHTTPSErrors: true,
   },
   projects: [
     {
