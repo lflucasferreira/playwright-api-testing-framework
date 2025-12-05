@@ -5,11 +5,9 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
  */
 export abstract class BaseAPI {
   protected request: APIRequestContext;
-  protected baseURL: string;
 
-  constructor(request: APIRequestContext, baseURL?: string) {
+  constructor(request: APIRequestContext) {
     this.request = request;
-    this.baseURL = baseURL || process.env.API_BASE_URL || 'https://restful-booker.herokuapp.com';
   }
 
   /**
@@ -19,7 +17,7 @@ export abstract class BaseAPI {
     endpoint: string,
     options?: { headers?: Record<string, string>; params?: Record<string, string> }
   ): Promise<{ response: APIResponse; data: T }> {
-    const response = await this.request.get(`${this.baseURL}${endpoint}`, {
+    const response = await this.request.get(endpoint, {
       headers: options?.headers,
       params: options?.params,
     });
@@ -35,7 +33,7 @@ export abstract class BaseAPI {
     body: unknown,
     options?: { headers?: Record<string, string> }
   ): Promise<{ response: APIResponse; data: T }> {
-    const response = await this.request.post(`${this.baseURL}${endpoint}`, {
+    const response = await this.request.post(endpoint, {
       data: body,
       headers: options?.headers,
     });
@@ -51,7 +49,7 @@ export abstract class BaseAPI {
     body: unknown,
     options?: { headers?: Record<string, string> }
   ): Promise<{ response: APIResponse; data: T }> {
-    const response = await this.request.put(`${this.baseURL}${endpoint}`, {
+    const response = await this.request.put(endpoint, {
       data: body,
       headers: options?.headers,
     });
@@ -67,7 +65,7 @@ export abstract class BaseAPI {
     body: unknown,
     options?: { headers?: Record<string, string> }
   ): Promise<{ response: APIResponse; data: T }> {
-    const response = await this.request.patch(`${this.baseURL}${endpoint}`, {
+    const response = await this.request.patch(endpoint, {
       data: body,
       headers: options?.headers,
     });
@@ -82,7 +80,7 @@ export abstract class BaseAPI {
     endpoint: string,
     options?: { headers?: Record<string, string> }
   ): Promise<APIResponse> {
-    return await this.request.delete(`${this.baseURL}${endpoint}`, {
+    return await this.request.delete(endpoint, {
       headers: options?.headers,
     });
   }

@@ -15,7 +15,7 @@ export class HealthAPI extends BaseAPI {
    * @returns Response with status 201 if healthy
    */
   async ping() {
-    const response = await this.request.get(`${this.baseURL}/ping`);
+    const response = await this.request.get('/ping');
     return { response, data: await response.text() };
   }
 }
