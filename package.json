@@ -1,0 +1,44 @@
+{
+  "name": "playwright-api-testing-framework",
+  "version": "1.0.0",
+  "description": "A comprehensive API testing framework built with Playwright and TypeScript, demonstrating best practices for REST API automation",
+  "author": "Lucas Ferreira",
+  "license": "MIT",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test tests/auth/",
+    "test:bookings": "playwright test tests/bookings/",
+    "test:health": "playwright test tests/health/",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:ci": "playwright test --reporter=github,html",
+    "report": "playwright show-report",
+    "lint": "eslint src/ tests/",
+    "lint:fix": "eslint src/ tests/ --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\""
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "playwright",
+    "api-testing",
+    "typescript",
+    "test-automation",
+    "rest-api",
+    "qa-automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lflucasferreira/playwright-api-testing-framework"
+  }
+}
+
